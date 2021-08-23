@@ -25,7 +25,9 @@ const Users = () => {
 
      const renderQualities = (qualities) => {
           return qualities.map((item) => (
-               <span className={"badge bg-" + item.color}>{item.name}</span>
+               <span id={"badge-company"} className={"badge bg-" + item.color}>
+                    {item.name}
+               </span>
           ));
      };
 
@@ -52,25 +54,27 @@ const Users = () => {
      console.log(users);
      return (
           <>
-               <h2>
-                    <span className={getBadgeClasses()}>
-                         {renderPhrase(users.length)}
-                    </span>
-               </h2>
+               <div className={"container-sm"}>
+                    <h2>
+                         <span className={getBadgeClasses()}>
+                              {renderPhrase(users.length)}
+                         </span>
+                    </h2>
 
-               <table className="table">
-                    <thead>
-                         <tr>
-                              <th scope="col">Имя</th>
-                              <th scope="col">Качества</th>
-                              <th scope="col">Профессия</th>
-                              <th scope="col">Встретился, раз</th>
-                              <th scope="col">Оценка</th>
-                              <th scope="col"></th>
-                         </tr>
-                    </thead>
-                    <tbody>{renderTable()}</tbody>
-               </table>
+                    <table className="table">
+                         <thead>
+                              <tr>
+                                   <th scope="col">Имя</th>
+                                   <th scope="col">Качества</th>
+                                   <th scope="col">Профессия</th>
+                                   <th scope="col">Встретился, раз</th>
+                                   <th scope="col">Оценка</th>
+                                   <th scope="col"></th>
+                              </tr>
+                         </thead>
+                         <tbody>{renderTable()}</tbody>
+                    </table>
+               </div>
           </>
      );
 };
