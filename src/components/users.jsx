@@ -10,11 +10,9 @@ const Users = () => {
      };
 
      const renderPhrase = (number) => {
-          const arr = [2, 3, 4];
-          const endOfWord = arr.some((item) => item === number)
-               ? "человека тусанут"
-               : "человек тусанет";
-          return `${number} ${endOfWord} с тобой сегодня`;
+          return number > 4 || number < 2
+               ? "человек тусанет"
+               : "человека тусанут";
      };
 
      const getBadgeClasses = () => {
@@ -57,23 +55,29 @@ const Users = () => {
                <div className={"container-sm"}>
                     <h2>
                          <span className={getBadgeClasses()}>
-                              {renderPhrase(users.length)}
+                              {/* {renderPhrase(users.length)} */}
+                              {users.length} {renderPhrase(users.length)} с
+                              тобой сегодня
                          </span>
                     </h2>
 
-                    <table className="table">
-                         <thead>
-                              <tr>
-                                   <th scope="col">Имя</th>
-                                   <th scope="col">Качества</th>
-                                   <th scope="col">Профессия</th>
-                                   <th scope="col">Встретился, раз</th>
-                                   <th scope="col">Оценка</th>
-                                   <th scope="col"></th>
-                              </tr>
-                         </thead>
-                         <tbody>{renderTable()}</tbody>
-                    </table>
+                    {users.length != 0 ? (
+                         <table className="table">
+                              <thead>
+                                   <tr>
+                                        <th scope="col">Имя</th>
+                                        <th scope="col">Качества</th>
+                                        <th scope="col">Профессия</th>
+                                        <th scope="col">Встретился, раз</th>
+                                        <th scope="col">Оценка</th>
+                                        <th scope="col"></th>
+                                   </tr>
+                              </thead>
+                              <tbody>{renderTable()}</tbody>
+                         </table>
+                    ) : (
+                         ""
+                    )}
                </div>
           </>
      );
