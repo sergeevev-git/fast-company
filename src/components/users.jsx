@@ -49,7 +49,6 @@ const Users = () => {
           ));
      };
 
-     console.log(users);
      return (
           <>
                <div className={"container-sm"}>
