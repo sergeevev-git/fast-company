@@ -1,14 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-// import App from "./App";
+import App from "./app/App";
 import reportWebVitals from "./reportWebVitals";
+import "./index.css";
 import "bootstrap/dist/css/bootstrap.css";
-import Users from "./components/users";
 
 ReactDOM.render(
      <React.StrictMode>
-          <Users />
+          <App />
      </React.StrictMode>,
      document.getElementById("root")
 );
