@@ -12,7 +12,7 @@ const App = () => {
           setUsers(
                users.map((user) => {
                     if (user._id === id) {
-                         user.status = !user.status;
+                         user.bookmark = !user.bookmark;
                     }
                     return user;
                })

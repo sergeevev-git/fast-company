@@ -9,7 +9,7 @@ const User = ({
      profession,
      completedMeetings,
      rate,
-     status,
+     bookmark,
      onDelete,
      onToggleBookmark,
 }) => {
@@ -27,7 +27,7 @@ const User = ({
                     <td>{rate}/5</td>
                     <td>
                          <button onClick={() => onToggleBookmark(_id)}>
-                              {<Bookmark status={status} />}
+                              {<Bookmark status={bookmark} />}
                          </button>
                     </td>
                     <td>
