@@ -10,19 +10,34 @@ const GroupList = ({
 }) => {
     return (
         <ul className="list-group">
-            {Object.keys(items).map((item) => (
-                <li
-                    key={items[item][valueProperty]}
-                    className={
-                        "list-group-item" +
-                        (items[item] === selectedItem ? " active" : "")
-                    }
-                    onClick={() => onItemSelect(items[item])}
-                    role="button"
-                >
-                    {items[item][contentProperty]}
-                </li>
-            ))}
+            {Array.isArray(items) &&
+                items.map((item) => (
+                    <li
+                        key={item._id}
+                        className={
+                            "list-group-item" +
+                            (item === selectedItem ? " active" : "")
+                        }
+                        onClick={() => onItemSelect(item)}
+                        role="button"
+                    >
+                        {item.name}
+                    </li>
+                ))}
+            {!Array.isArray(items) &&
+                Object.keys(items).map((item) => (
+                    <li
+                        key={items[item][valueProperty]}
+                        className={
+                            "list-group-item" +
+                            (items[item] === selectedItem ? " active" : "")
+                        }
+                        onClick={() => onItemSelect(items[item])}
+                        role="button"
+                    >
+                        {items[item][contentProperty]}
+                    </li>
+                ))}
         </ul>
     );
 };
