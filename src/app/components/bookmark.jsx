@@ -1,11 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Bookmark = ({ status }) => {
+const Bookmark = ({ status, ...rest }) => {
     const checkStatus = () => {
         return status ? "-check-fill" : "";
     };
-    return <i className={"bi bi-bookmark" + checkStatus()}></i>;
+    return (
+        <button {...rest}>
+            <i className={"bi bi-bookmark" + checkStatus()}></i>
+        </button>
+    );
 };
 
 Bookmark.propTypes = {
