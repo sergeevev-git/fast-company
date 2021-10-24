@@ -9,11 +9,13 @@ import UsersTable from "./usersTable.jsx";
 import _ from "lodash";
 import UserPage from "./userPage.jsx";
 import { useParams } from "react-router";
+import Search from "../components/search";
 
 const UsersList = () => {
     const [professions, setProfessions] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedProf, setSelectedProf] = useState();
+    // const [searchName, setSearchName] = useState();
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 8;
 
@@ -56,6 +58,10 @@ const UsersList = () => {
     const handleProfessionSelect = (item) => {
         setSelectedProf(item);
     };
+
+    // const handleSearchName = (value) => {
+    //     setSearchName(value);
+    // };
 
     const handleSort = (item) => {
         setSortBy(item);
@@ -100,6 +106,9 @@ const UsersList = () => {
                         )}
                         <div className="d-flex flex-column">
                             <SearchStatus length={count} />
+
+                            <Search />
+
                             {count > 0 && (
                                 <UsersTable
                                     users={usersCrop}
