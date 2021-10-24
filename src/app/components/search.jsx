@@ -1,26 +1,26 @@
-import React from "react";
-import TextField from "../components/textField";
+// import React from "react";
+// import TextField from "../components/textField";
+// import PropTypes from "prop-types";
 
-const Search = () => {
-    const handleChange = ({ target }) => {
-        console.log(target.value);
-        //    setData((prevState) => ({
-        //        ...prevState,
-        //        [target.name]: target.value
-        //    }));
-    };
+// const Search = ({ searchParams, handleSearchParams }) => {
+//     //     const [data, setData] = useState(searchParams);
 
-    return (
-        <form>
-            <TextField
-                name="search"
-                type="search"
-                placeholder="Search..."
-                //  value={data.email}
-                onChange={handleChange}
-            />
-        </form>
-    );
-};
+//     const handleChange = ({ target }) => {
+//         //    console.log(target.value);
+//         handleSearchParams(target.value);
+//         //    setData(target.value);
+//         //    setData((prevState) => ({
+//         //        ...prevState,
+//         //        [target.name]: target.value
+//         //    }));
+//     };
 
-export default Search;
+//     return <form></form>;
+// };
+
+// export default Search;
+
+// Search.propTypes = {
+//     searchParams: PropTypes.string,
+//     handleSearchParams: PropTypes.func.isRequired
+// };

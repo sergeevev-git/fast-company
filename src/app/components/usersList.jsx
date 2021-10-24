@@ -9,13 +9,13 @@ import UsersTable from "./usersTable.jsx";
 import _ from "lodash";
 import UserPage from "./userPage.jsx";
 import { useParams } from "react-router";
-import Search from "../components/search";
+import TextField from "../components/textField";
 
 const UsersList = () => {
     const [professions, setProfessions] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedProf, setSelectedProf] = useState();
-    // const [searchName, setSearchName] = useState();
+    const [searchParams, setSearchParams] = useState("");
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 8;
 
@@ -49,19 +49,21 @@ const UsersList = () => {
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedProf]);
+    }, [selectedProf, searchParams]);
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
 
     const handleProfessionSelect = (item) => {
+        setSearchParams("");
         setSelectedProf(item);
     };
 
-    // const handleSearchName = (value) => {
-    //     setSearchName(value);
-    // };
+    const handleSearchParams = ({ target }) => {
+        setSelectedProf();
+        setSearchParams(target.value.toLowerCase());
+    };
 
     const handleSort = (item) => {
         setSortBy(item);
@@ -70,6 +72,10 @@ const UsersList = () => {
     if (users) {
         const filteredUsers = selectedProf
             ? users.filter((user) => user.profession.name === selectedProf.name)
+            : searchParams
+            ? users.filter((user) =>
+                  user.name.toLowerCase().includes(searchParams)
+              )
             : users;
 
         const count = filteredUsers.length;
@@ -107,7 +113,13 @@ const UsersList = () => {
                         <div className="d-flex flex-column">
                             <SearchStatus length={count} />
 
-                            <Search />
+                            <TextField
+                                name="search"
+                                type="search"
+                                value={searchParams}
+                                placeholder="Search..."
+                                onChange={handleSearchParams}
+                            />
 
                             {count > 0 && (
                                 <UsersTable
