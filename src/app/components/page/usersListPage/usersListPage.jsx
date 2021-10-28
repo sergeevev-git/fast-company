@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from "react";
-import Pagination from "./pagination.jsx";
-import { paginate } from "../utils/paginate";
+import Pagination from "../../common/pagination";
+import { paginate } from "../../../utils/paginate";
 import PropTypes from "prop-types";
-import GroupList from "./grouplist.jsx";
-import api from "../api";
-import SearchStatus from "./searchStatus";
-import UsersTable from "./usersTable.jsx";
+import GroupList from "../../common/grouplist.jsx";
+import api from "../../../api";
+import SearchStatus from "../../ui/searchStatus";
+import UsersTable from "../../ui/usersTable";
 import _ from "lodash";
-import UserPage from "./userPage.jsx";
+import UserPage from "../userPage/userPage.jsx";
 import { useParams } from "react-router";
-import TextField from "../components/textField";
+import TextField from "../../common/form/textField";
 
-const UsersList = () => {
+const UsersListPage = () => {
     const [professions, setProfessions] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedProf, setSelectedProf] = useState();
-    const [searchParams, setSearchParams] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 8;
 
@@ -49,20 +49,20 @@ const UsersList = () => {
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedProf, searchParams]);
+    }, [selectedProf, searchQuery]);
 
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
 
     const handleProfessionSelect = (item) => {
-        setSearchParams("");
+        if (searchQuery !== "") setSearchQuery("");
         setSelectedProf(item);
     };
 
-    const handleSearchParams = ({ target }) => {
-        setSelectedProf();
-        setSearchParams(target.value.toLowerCase());
+    const handleSearchQuery = ({ target }) => {
+        setSelectedProf(undefined);
+        setSearchQuery(target.value);
     };
 
     const handleSort = (item) => {
@@ -70,12 +70,14 @@ const UsersList = () => {
     };
 
     if (users) {
-        const filteredUsers = selectedProf
-            ? users.filter((user) => user.profession.name === selectedProf.name)
-            : searchParams
+        const filteredUsers = searchQuery
             ? users.filter((user) =>
-                  user.name.toLowerCase().includes(searchParams)
+                  user.name
+                      .toLowerCase()
+                      .includes(searchQuery.toLocaleLowerCase())
               )
+            : selectedProf
+            ? users.filter((user) => user.profession.name === selectedProf.name)
             : users;
 
         const count = filteredUsers.length;
@@ -114,11 +116,11 @@ const UsersList = () => {
                             <SearchStatus length={count} />
 
                             <TextField
-                                name="search"
+                                name="searchQuery"
                                 type="search"
-                                value={searchParams}
+                                value={searchQuery}
                                 placeholder="Search..."
-                                onChange={handleSearchParams}
+                                onChange={handleSearchQuery}
                             />
 
                             {count > 0 && (
@@ -147,8 +149,8 @@ const UsersList = () => {
     return "loading...";
 };
 
-UsersList.propTypes = {
+UsersListPage.propTypes = {
     users: PropTypes.array
 };
 
-export default UsersList;
+export default UsersListPage;
