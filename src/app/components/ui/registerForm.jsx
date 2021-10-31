@@ -163,14 +163,13 @@ const Registerform = () => {
                 options={qualities}
                 name="qualities"
                 label="Выберите ваши качества"
-                defaultValue={data.qualities}
             />
 
             <CheckboxField
                 value={data.license}
                 onChange={handleChange}
                 name="license"
-                error={errors.license}
+                error={errors.email}
             >
                 Подтвердить <a>лицензионное соглашение</a>
             </CheckboxField>

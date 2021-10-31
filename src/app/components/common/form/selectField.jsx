@@ -30,6 +30,7 @@ const SelectField = ({
             <label htmlFor="validationCustom04" className="form-label">
                 {label}
             </label>
+            {value}
             <select
                 name="profession"
                 className={getInputClasses()}
@@ -41,6 +42,7 @@ const SelectField = ({
                 <option disabled value="">
                     {defaultOption}
                 </option>
+
                 {optionsArray &&
                     optionsArray.map((option) => (
                         <option value={option.value} key={option.value}>
