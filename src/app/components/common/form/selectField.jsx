@@ -30,12 +30,12 @@ const SelectField = ({
             <label htmlFor="validationCustom04" className="form-label">
                 {label}
             </label>
-            {value}
+
             <select
                 name="profession"
                 className={getInputClasses()}
                 id="validationCustom04"
-                // required
+                required
                 value={value}
                 onChange={handleChange}
             >

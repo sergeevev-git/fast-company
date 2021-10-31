@@ -12,27 +12,61 @@ const UserEditPage = () => {
     const [professions, setProfessions] = useState();
     const [qualities, setQualities] = useState({});
     const [errors, setErrors] = useState({});
-    const [isLoading, setIsLoading] = useState(false);
+    const [isUpdate, setIsUpdate] = useState(false);
     const { userId } = useParams();
     const history = useHistory();
 
     const handleChange = (target) => {
-        setUserData((prevState) => ({
-            ...prevState,
-            [target.name]: target.value
-        }));
+        switch (target.name) {
+            case "profession": {
+                setUserData((prevState) => ({
+                    ...prevState,
+                    profession: getProfessionById(target.value)
+                }));
+                break;
+            }
+            case "qualities": {
+                setUserData((prevState) => ({
+                    ...prevState,
+                    qualities: getQualitiesById(target.value)
+                }));
+                break;
+            }
+            default: {
+                setUserData((prevState) => ({
+                    ...prevState,
+                    [target.name]: target.value
+                }));
+                break;
+            }
+        }
+        // if (target.name === "profession") {
+        //     setUserData((prevState) => ({
+        //         ...prevState,
+        //         profession: getProfessionById(target.value)
+        //     }));
+        // } else if (target.name === "qualities") {
+        //     setUserData((prevState) => ({
+        //         ...prevState,
+        //         qualities: getQualitiesById(target.value)
+        //     }));
+        // } else {
+        //     setUserData((prevState) => ({
+        //         ...prevState,
+        //         [target.name]: target.value
+        //     }));
+        // }
     };
 
     useEffect(() => {
-        setIsLoading(true);
         api.users.getById(userId).then((data) => setUserData(data));
         api.professions.fetchAll().then((data) => setProfessions(data));
         api.qualities.fetchAll().then((data) => setQualities(data));
     }, []);
 
     useEffect(() => {
-        console.log("userData changed");
-    }, [userData]);
+        if (isUpdate) history.push(`/users/${userData._id}`);
+    }, [isUpdate]);
 
     const getProfessionById = (id) => {
         for (const key in professions) {
@@ -42,7 +76,12 @@ const UserEditPage = () => {
         }
     };
 
-    //     const getqualitiesById = (id) => {};
+    const getQualitiesById = (array) => {
+        array = array.map((item) => item.value);
+        return Object.values(qualities).filter((qualitie) => {
+            return array.includes(qualitie._id);
+        });
+    };
 
     const validatorConfig = {
         name: {
@@ -75,17 +114,15 @@ const UserEditPage = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        if (isLoading) {
-            setUserData((prevState) => ({
-                ...prevState,
-
-                profession: getProfessionById(userData.profession)
-            }));
-        }
-        history.push(`/users/${userData._id}`);
-
-        console.log(JSON.parse(localStorage.getItem("users")));
-        console.log(userData);
+        let LS = JSON.parse(localStorage.getItem("users"));
+        LS = LS.map((user) => {
+            if (user._id === userId) {
+                user = userData;
+            }
+            return user;
+        });
+        localStorage.setItem("users", JSON.stringify(LS));
+        setIsUpdate(true);
     };
 
     return (
@@ -117,7 +154,7 @@ const UserEditPage = () => {
                                     options={professions}
                                     defaultOption="Choose..."
                                     error={errors.profession}
-                                    value={userData.profession.name}
+                                    value={userData.profession._id}
                                     label="Выберите вашу профессию:"
                                 />
 
@@ -139,6 +176,7 @@ const UserEditPage = () => {
                                     name="qualities"
                                     label="Выберите ваши качества:"
                                     defaultValue={[userData.qualities]}
+                                    error={errors.qualities}
                                 />
 
                                 <button

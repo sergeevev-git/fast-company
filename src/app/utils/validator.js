@@ -8,7 +8,7 @@ export function validator(data, config) {
                 if (typeof data === "boolean") {
                     statusValidate = !data;
                 } else if (Array.isArray(data)) {
-                    statusValidate = data === [];
+                    statusValidate = data.length === 0;
                 } else {
                     statusValidate = data.trim() === "";
                 }

@@ -60,7 +60,7 @@ const UsersListPage = () => {
         setSelectedProf(item);
     };
 
-    const handleSearchQuery = ({ target }) => {
+    const handleSearchQuery = (target) => {
         setSelectedProf(undefined);
         setSearchQuery(target.value);
     };
