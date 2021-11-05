@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 const SelectField = ({
     label,
     value,
+    name,
     onChange,
     defaultOption,
     options,
@@ -14,6 +15,7 @@ const SelectField = ({
     };
 
     function handleChange({ target }) {
+        console.log(target.name, target.value);
         onChange({ name: target.name, value: target.value });
     }
 
@@ -32,7 +34,8 @@ const SelectField = ({
             </label>
 
             <select
-                name="profession"
+                // name="profession"
+                name={name}
                 className={getInputClasses()}
                 id="validationCustom04"
                 required
@@ -45,7 +48,10 @@ const SelectField = ({
 
                 {optionsArray &&
                     optionsArray.map((option) => (
-                        <option value={option.value} key={option.value}>
+                        <option
+                            value={option._id || option.value}
+                            key={option._id || option.value}
+                        >
                             {option.name}
                         </option>
                     ))}
@@ -78,6 +84,7 @@ const SelectField = ({
 SelectField.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
+    name: PropTypes.string,
     defaultOption: PropTypes.string,
     options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     onChange: PropTypes.func,

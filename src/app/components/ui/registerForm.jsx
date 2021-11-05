@@ -99,6 +99,7 @@ const Registerform = () => {
             <SelectField
                 onChange={handleChange}
                 options={professions}
+                name="profession"
                 defaultOption="Choose..."
                 error={errors.profession}
                 value={data.profession}

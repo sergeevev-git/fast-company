@@ -2,8 +2,9 @@ import api from "../../../api";
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Qualities from "../../ui/qualities";
-import { Link } from "react-router-dom";
-// import UserEditPage from "../userEditPage/userEditPage";
+import MeetingsCard from "./meetingsCard";
+import UserInfoCard from "./userInfoCard";
+import CommentsList from "./commentsList";
 
 const UserPage = ({ userId }) => {
     // const history = useHistory();
@@ -19,24 +20,30 @@ const UserPage = ({ userId }) => {
 
     return (
         <>
-            {user && (
-                <>
-                    <h2>{user.name}</h2>
-                    <h3>Профессия: {user.profession.name}</h3>
-                    <h3>Sex: {user.sex}</h3>
-                    <Qualities qualities={user.qualities} />
-                    <h4>completedMeetings: {user.completedMeetings}</h4>
-                    <h3>Rate: {user.rate}</h3>
-                    {/* <button>
-                        <Link to="/users">Все пользователи</Link>
-                    </button> */}
-                    {/* <button onClick={handleClick}>Edit</button> */}
-                    <button>
-                        <Link to={`/users/${user._id}/edit`}>Edit</Link>
-                    </button>
-                </>
+            {user ? (
+                <div className="container">
+                    <div className="row gutters-sm">
+                        <div className="col-md-4 mb3">
+                            <UserInfoCard
+                                id={user._id}
+                                name={user.name}
+                                profession={user.profession.name}
+                                rate={user.rate}
+                            />
+
+                            <Qualities qualities={user.qualities} />
+                            <MeetingsCard
+                                completedMeetings={user.completedMeetings}
+                            />
+                        </div>
+                        <div className="col md-8">
+                            <CommentsList userId={userId} />
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <h1>Loading...</h1>
             )}
-            {!user && <h1>Loading...</h1>}
         </>
     );
 };

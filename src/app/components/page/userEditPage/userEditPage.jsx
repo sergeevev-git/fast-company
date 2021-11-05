@@ -83,6 +83,10 @@ const UserEditPage = () => {
         });
     };
 
+    const handleToPreviousPage = () => {
+        history.push(`/users/${userData._id}`);
+    };
+
     const validatorConfig = {
         name: {
             isRequired: {
@@ -130,7 +134,18 @@ const UserEditPage = () => {
             {userData ? (
                 <div className="container mt-5">
                     <div className="row ">
-                        <div className="col-md-8 offset-md-2 shadow p-4">
+                        <div className="col-md-1 offset-md-12 mb-4 ">
+                            <button
+                                className="btn btn-primary w-100 mx-auto"
+                                onClick={() => {
+                                    handleToPreviousPage();
+                                }}
+                            >
+                                Назад
+                            </button>
+                        </div>
+
+                        <div className="col-md-6 offset-md-3 shadow p-4">
                             <form onSubmit={handleSubmit}>
                                 <TextField
                                     label="Имя:"
@@ -152,6 +167,7 @@ const UserEditPage = () => {
                                 <SelectField
                                     onChange={handleChange}
                                     options={professions}
+                                    name="profession"
                                     defaultOption="Choose..."
                                     error={errors.profession}
                                     value={userData.profession._id}
