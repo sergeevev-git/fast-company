@@ -43,38 +43,52 @@ const CommentsList = ({ userId }) => {
         return owner ? owner.name : "";
     };
 
-    return (
-        <>
-            <div className="card mb-2">
-                {" "}
-                <div className="card-body ">
-                    <AddComment
-                        users={users}
-                        // addComment={addComment}
-                        pageOwner={userId}
-                        setIsUpdate={setIsUpdate}
-                    />
-                </div>
-            </div>
-
-            <div className="card mb-3">
-                <div className="card-body ">
-                    <h2>Comments</h2>
-                    <hr />
-                    {commentsForUser.map((comment) => (
-                        <Comment
-                            key={comment._id}
-                            id={comment._id}
-                            // name={comment.userId}
-                            name={commentOwner(comment.userId)}
-                            time={comment.created_at}
-                            comment={comment.content}
-                            deleteComment={deleteComment}
+    if (commentsForUser.length !== 0) {
+        return (
+            <>
+                <div className="card mb-2">
+                    <div className="card-body ">
+                        <AddComment
+                            users={users}
+                            // addComment={addComment}
+                            pageOwner={userId}
+                            setIsUpdate={setIsUpdate}
                         />
-                    ))}
+                    </div>
                 </div>
+
+                <div className="card mb-3">
+                    <div className="card-body ">
+                        <h2>Comments</h2>
+                        <hr />
+                        {commentsForUser.map((comment) => (
+                            <Comment
+                                key={comment._id}
+                                id={comment._id}
+                                // name={comment.userId}
+                                name={commentOwner(comment.userId)}
+                                time={comment.created_at}
+                                comment={comment.content}
+                                deleteComment={deleteComment}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </>
+        );
+    }
+
+    return (
+        <div className="card mb-2">
+            <div className="card-body ">
+                <AddComment
+                    users={users}
+                    // addComment={addComment}
+                    pageOwner={userId}
+                    setIsUpdate={setIsUpdate}
+                />
             </div>
-        </>
+        </div>
     );
 };
 
