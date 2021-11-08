@@ -15,7 +15,7 @@ const SelectField = ({
     };
 
     function handleChange({ target }) {
-        console.log(target.name, target.value);
+        // console.log(target.name, target.value);
         onChange({ name: target.name, value: target.value });
     }
 

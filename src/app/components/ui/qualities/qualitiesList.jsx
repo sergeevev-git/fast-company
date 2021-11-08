@@ -1,14 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Qualitie from "./qualitie";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 const QualitiesList = ({ qualities }) => {
-    const params = useParams();
-    const { userId } = params;
+    // const params = useParams();
+    // const { userId } = params;
     return (
         <>
-            {userId ? (
+            {/* {userId ? (
                 <div className="card mb-3">
                     <div className="card-body d-flex flex-column justify-content-center text-center">
                         <h5 className="card-title">
@@ -22,12 +22,12 @@ const QualitiesList = ({ qualities }) => {
                     </div>
                 </div>
             ) : (
-                <>
-                    {qualities.map((qualitie) => (
-                        <Qualitie key={qualitie._id} {...qualitie} />
-                    ))}
-                </>
-            )}
+                <> */}
+            {qualities.map((qualitie) => (
+                <Qualitie key={qualitie._id} {...qualitie} />
+            ))}
+            {/* </>
+            )} */}
         </>
     );
 };

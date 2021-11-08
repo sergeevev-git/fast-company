@@ -5,17 +5,15 @@ import Main from "./layouts/main";
 import Login from "./layouts/login";
 import Users from "./layouts/users";
 import NotFound from "./components/not-found.jsx";
-import UserEditPage from "./components/page/userEditPage/userEditPage";
 
 const App = () => {
     return (
         <div>
             <NavBar></NavBar>
             <Switch>
-                <Route path="/" exact component={Main} />
+                <Route path="/users/:userId?/:edit?" component={Users} />
                 <Route path="/login/:type?" component={Login} />
-                <Route exact path="/users/:userId?" component={Users} />
-                <Route path="/users/:userId/edit" component={UserEditPage} />
+                <Route path="/" exact component={Main} />
                 <Route path="/404" component={NotFound} />
                 <Redirect to="/404" />
             </Switch>
