@@ -6,6 +6,7 @@ import Qualitie from "./qualitie";
 const QualitiesList = ({ qualities }) => {
     // const params = useParams();
     // const { userId } = params;
+
     return (
         <>
             {/* {userId ? (
@@ -23,11 +24,9 @@ const QualitiesList = ({ qualities }) => {
                 </div>
             ) : (
                 <> */}
-            {qualities.map((qualitie) => (
-                <Qualitie key={qualitie._id} {...qualitie} />
-            ))}
-            {/* </>
-            )} */}
+            {qualities.map((qualitie) => {
+                return <Qualitie key={qualitie._id} {...qualitie} />;
+            })}
         </>
     );
 };

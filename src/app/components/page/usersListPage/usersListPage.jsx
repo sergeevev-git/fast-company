@@ -10,6 +10,7 @@ import _ from "lodash";
 import UserPage from "../userPage/userPage.jsx";
 import { useParams } from "react-router";
 import TextField from "../../common/form/textField";
+import { useUser } from "../../../hooks/useUsers";
 
 const UsersListPage = () => {
     const [professions, setProfessions] = useState();
@@ -19,21 +20,27 @@ const UsersListPage = () => {
     const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
     const pageSize = 8;
 
-    const [users, setUsers] = useState();
+    const { users } = useUser();
+    console.log(users);
 
     const params = useParams();
     const { userId } = params;
 
-    useEffect(() => {
-        api.users.fetchAll().then((data) => setUsers(data));
-    }, []);
-
     const handleDelete = (userId) => {
-        setUsers(users.filter((item) => item._id !== userId));
+        // setUsers(users.filter((item) => item._id !== userId));
+        console.log(userId);
     };
 
     const handleToggleBookmark = (id) => {
-        setUsers(
+        // setUsers(
+        //     users.map((user) => {
+        //         if (user._id === id) {
+        //             user.bookmark = !user.bookmark;
+        //         }
+        //         return user;
+        //     })
+        // );
+        console.log(
             users.map((user) => {
                 if (user._id === id) {
                     user.bookmark = !user.bookmark;
