@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
 import CheckboxField from "../common/form/checkBoxField";
+import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router";
 // import * as yup from "yup";
 
 const LoginForm = () => {
@@ -11,6 +13,8 @@ const LoginForm = () => {
         stayOn: false
     });
     const [errors, setErrors] = useState({});
+    const { signIn } = useAuth();
+    const history = useHistory();
 
     const handleChange = (target) => {
         setData((prevState) => ({
@@ -42,17 +46,17 @@ const LoginForm = () => {
             isEmail: { message: "Email введен некорректно" }
         },
         password: {
-            isRequired: { message: "password обязателен для заполнения" },
-            isCapitalSymbol: {
-                message: "пароль должен содержать заглавные буквы"
-            },
-            isContainDigit: {
-                message: "пароль должен содержать цифры"
-            },
-            min: {
-                message: "пароль должен быть минимум 8 символов",
-                value: 8
-            }
+            isRequired: { message: "password обязателен для заполнения" }
+            // isCapitalSymbol: {
+            //     message: "пароль должен содержать заглавные буквы"
+            // },
+            // isContainDigit: {
+            //     message: "пароль должен содержать цифры"
+            // },
+            // min: {
+            //     message: "пароль должен быть минимум 8 символов",
+            //     value: 8
+            // }
         }
     };
 
@@ -74,11 +78,16 @@ const LoginForm = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log(data);
+        try {
+            await signIn(data);
+            history.push("/");
+        } catch (error) {
+            setErrors(error);
+        }
     };
 
     return (

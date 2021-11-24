@@ -52,29 +52,9 @@ const SelectField = ({
                             value={option._id || option.value}
                             key={option._id || option.value}
                         >
-                            {option.name}
+                            {option.label}
                         </option>
                     ))}
-                {/* {professions &&
-                    (Array.isArray(professions)
-                        ? professions.map((profession) => (
-                              <option
-                                  //   selected={profession._id === data.profession}
-                                  value={profession._id}
-                                  key={profession._id}
-                              >
-                                  {profession.name}
-                              </option>
-                          ))
-                        : Object.keys(professions).map((professionName) => (
-                              <option
-                                  //   selected={profession._id === data.profession}
-                                  value={professions[professionName]._id}
-                                  key={professions[professionName]._id}
-                              >
-                                  {professions[professionName].name}
-                              </option>
-                          )))} */}
             </select>
             {error && <div className="invalid-feedback">{error}</div>}
         </div>

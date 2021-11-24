@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
-import api from "../../api";
+
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckboxField from "../common/form/checkBoxField";
+import { useQualities } from "../../hooks/useQualities";
+import { useProfessions } from "../../hooks/useProfession";
+import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router";
 
 const Registerform = () => {
+    const history = useHistory();
     const [data, setData] = useState({
         email: "",
         password: "",
@@ -17,8 +22,19 @@ const Registerform = () => {
         license: false
     });
     const [errors, setErrors] = useState({});
-    const [professions, setProfessions] = useState();
-    const [qualities, setQualities] = useState({});
+    const { signUp } = useAuth();
+    const { professions } = useProfessions();
+    const { qualities } = useQualities();
+
+    const qualitiesList = qualities.map((q) => ({
+        label: q.name,
+        value: q._id
+    }));
+
+    const professionsList = professions.map((p) => ({
+        label: p.name,
+        value: p._id
+    }));
 
     const handleChange = (target) => {
         setData((prevState) => ({
@@ -26,11 +42,6 @@ const Registerform = () => {
             [target.name]: target.value
         }));
     };
-
-    useEffect(() => {
-        api.professions.fetchAll().then((data) => setProfessions(data));
-        api.qualities.fetchAll().then((data) => setQualities(data));
-    }, []);
 
     const validatorConfig = {
         email: {
@@ -72,11 +83,21 @@ const Registerform = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        console.log(data);
+        const newData = {
+            ...data,
+            qualities: data.qualities.map((q) => q.value)
+        };
+
+        try {
+            await signUp(newData);
+            history.push("/");
+        } catch (error) {
+            setErrors(error);
+        }
     };
 
     return (
@@ -98,7 +119,7 @@ const Registerform = () => {
             />
             <SelectField
                 onChange={handleChange}
-                options={professions}
+                options={professionsList}
                 name="profession"
                 defaultOption="Choose..."
                 error={errors.profession}
@@ -118,50 +139,9 @@ const Registerform = () => {
                 name="sex"
             />
 
-            {/* <div className="mb-4">
-                <label htmlFor="validationCustom04" className="form-label">
-                    Professions
-                </label>
-                <select
-                    className="form-select"
-                    id="validationCustom04"
-                    // required
-                    name="profession"
-                    value={data.profession}
-                    onChange={handleChange}
-                >
-                    <option disabled value="">
-                        Choose...
-                    </option>
-                    {professions &&
-                        (Array.isArray(professions)
-                            ? professions.map((profession) => (
-                                  <option
-                                      //   selected={profession._id === data.profession}
-                                      value={profession._id}
-                                      key={profession._id}
-                                  >
-                                      {profession.name}
-                                  </option>
-                              ))
-                            : Object.keys(professions).map((professionName) => (
-                                  <option
-                                      //   selected={profession._id === data.profession}
-                                      value={professions[professionName]._id}
-                                      key={professions[professionName]._id}
-                                  >
-                                      {professions[professionName].name}
-                                  </option>
-                              )))}
-                </select>
-                <div className="invalid-feedback">
-                    Please select a valid profession.
-                </div>
-            </div> */}
-
             <MultiSelectField
                 onChange={handleChange}
-                options={qualities}
+                options={qualitiesList}
                 name="qualities"
                 label="Выберите ваши качества"
             />

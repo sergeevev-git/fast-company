@@ -8,25 +8,30 @@ import NotFound from "./components/page/not-found.jsx";
 import { ToastContainer } from "react-toastify";
 import { ProfessionProvider } from "./hooks/useProfession";
 import { QualityProvider } from "./hooks/useQualities";
+import AuthProvider from "./hooks/useAuth";
 
 const App = () => {
     return (
         <div>
-            <NavBar></NavBar>
-            <Switch>
+            <AuthProvider>
+                <NavBar></NavBar>
+
                 <QualityProvider>
                     <ProfessionProvider>
-                        <Route
-                            path="/users/:userId?/:edit?"
-                            component={Users}
-                        />
-                        <Route path="/login/:type?" component={Login} />
+                        <Switch>
+                            <Route
+                                path="/users/:userId?/:edit?"
+                                component={Users}
+                            />
+                            <Route path="/login/:type?" component={Login} />
+                            <Route path="/" exact component={Main} />
+                            <Route path="/404" component={NotFound} />
+                            <Redirect to="/404" />
+                        </Switch>
                     </ProfessionProvider>
                 </QualityProvider>
-                <Route path="/" exact component={Main} />
-                <Route path="/404" component={NotFound} />
-                <Redirect to="/404" />
-            </Switch>
+            </AuthProvider>
+
             <ToastContainer />
         </div>
     );
