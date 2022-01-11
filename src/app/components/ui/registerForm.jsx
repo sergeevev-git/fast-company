@@ -18,6 +18,7 @@ const Registerform = () => {
         password: "",
         profession: "",
         sex: "male",
+        name: "",
         qualities: [],
         license: false
     });
@@ -45,11 +46,18 @@ const Registerform = () => {
 
     const validatorConfig = {
         email: {
-            isRequired: { message: "email обязательная для заполнение" },
+            isRequired: { message: "email обязательная для заполнения" },
             isEmail: { message: "Email введен некорректно" }
         },
+        name: {
+            isRequired: { message: "Имя обязательно для заполнения" },
+            min: {
+                message: "Имя должно быть минимум 3 символов",
+                value: 3
+            }
+        },
         password: {
-            isRequired: { message: "password обязателен для заполнение" },
+            isRequired: { message: "password обязателен для заполнения" },
             isCapitalSymbol: {
                 message: "пароль должен содержать заглавные буквы"
             },
@@ -108,6 +116,13 @@ const Registerform = () => {
                 value={data.email}
                 onChange={handleChange}
                 error={errors.email}
+            />
+            <TextField
+                label="name"
+                name="name"
+                value={data.name}
+                onChange={handleChange}
+                error={errors.name}
             />
             <TextField
                 label="password"

@@ -13,8 +13,9 @@ const MultiSelectField = ({
     const getInputClasses = () => {
         return "basic-multi-select" + (error ? " is-invalid" : "");
     };
+
     if (defaultValue) {
-        defaultValue = defaultValue[0].map((optionName) => {
+        defaultValue = defaultValue.map((optionName) => {
             return {
                 label: optionName.name,
                 value: optionName._id

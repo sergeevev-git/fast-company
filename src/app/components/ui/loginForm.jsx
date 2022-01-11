@@ -13,6 +13,7 @@ const LoginForm = () => {
         stayOn: false
     });
     const [errors, setErrors] = useState({});
+    const [enterError, setEnterError] = useState(null);
     const { signIn } = useAuth();
     const history = useHistory();
 
@@ -21,6 +22,7 @@ const LoginForm = () => {
             ...prevState,
             [target.name]: target.value
         }));
+        setEnterError(null);
     };
 
     // const validateScheme = yup.object().shape({
@@ -42,8 +44,8 @@ const LoginForm = () => {
 
     const validatorConfig = {
         email: {
-            isRequired: { message: "Email обязательная для заполнения" },
-            isEmail: { message: "Email введен некорректно" }
+            isRequired: { message: "Email обязательная для заполнения" }
+            // isEmail: { message: "Email введен некорректно" }
         },
         password: {
             isRequired: { message: "password обязателен для заполнения" }
@@ -84,9 +86,13 @@ const LoginForm = () => {
         if (!isValid) return;
         try {
             await signIn(data);
-            history.push("/");
+            history.push(
+                history.location.state
+                    ? history.location.state.from.pathname
+                    : "/"
+            );
         } catch (error) {
-            setErrors(error);
+            setEnterError(error.message);
         }
     };
 
@@ -114,10 +120,11 @@ const LoginForm = () => {
             >
                 Оставаться в системе
             </CheckboxField>
+            {enterError && <p className="text-danger">{enterError}</p>}
             <button
                 className="btn btn-primary w-100 mx-auto"
                 type="submit"
-                disabled={!isValid}
+                disabled={!isValid || enterError}
             >
                 Submit
             </button>
