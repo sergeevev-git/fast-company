@@ -14,14 +14,12 @@ const MultiSelectField = ({
         return "basic-multi-select" + (error ? " is-invalid" : "");
     };
 
-    if (defaultValue) {
-        defaultValue = defaultValue.map((optionName) => {
-            return {
-                label: optionName.name,
-                value: optionName._id
-            };
-        });
-    }
+    // if (defaultValue) {
+    //     defaultValue = defaultValue.map((optionName) => ({
+    //         label: optionName.label,
+    //         value: optionName.value
+    //     }));
+    // }
 
     const optionsArray =
         !Array.isArray(options) && typeof options === "object"

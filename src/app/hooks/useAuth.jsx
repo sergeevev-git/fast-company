@@ -58,7 +58,6 @@ const AuthProvider = ({ children }) => {
 
     async function updateUserData(data) {
         try {
-            data = { ...data, qualities: data.qualities.map((q) => q.value) };
             const { content } = await userService.update(data);
             setCurrentUser(content);
         } catch (error) {

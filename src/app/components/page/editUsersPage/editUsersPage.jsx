@@ -13,12 +13,12 @@ import { useAuth } from "../../../hooks/useAuth";
 const UserEditPage = () => {
     const { userId } = useParams();
     const history = useHistory();
-    const [isUpdate, setIsUpdate] = useState(true);
     const { currentUser, updateUserData } = useAuth();
-    const [userData, setUserData] = useState({});
+    const { professions, isLoading: professionsLoading } = useProfessions();
+    const { qualities, isLoading: qualitiesLoading } = useQualities();
+    const [isUpdate, setIsUpdate] = useState(true);
+    const [userData, setUserData] = useState();
     const [errors, setErrors] = useState({});
-    const { professions } = useProfessions();
-    const { qualities, getQuality } = useQualities();
 
     const qualitiesList = qualities.map((q) => ({
         label: q.name,
@@ -30,42 +30,49 @@ const UserEditPage = () => {
         value: p._id
     }));
 
-    // const userQualitiesList = (array) => {
-    //     console.log(array);
-    //     return array.map((q) => q.value);
-    // };
+    function getQualitiesListByIds(qualitiesIds) {
+        const qualitiesArray = [];
+        for (const qualityId of qualitiesIds) {
+            for (const quality of qualities) {
+                if (quality._id === qualityId) {
+                    qualitiesArray.push(quality);
+                    break;
+                }
+            }
+        }
+        return qualitiesArray;
+    }
 
-    // const userProfession = getProfession(userData.profession).name;
+    // const getQualitiesListByIds = (array) => {
+    //         array = array.map((item) => item.value);
+    //         return Object.values(qualities).filter((qualitie) => {
+    //             return array.includes(qualitie._id);
+    //         });
+    //     };
 
-    //  у Василия реализовано иначе
-    // const getProfessionById = (id) => {
-    //     for (const key in professions) {
-    //         if (professions[key]._id === id) {
-    //             return professions[key];
-    //         }
-    //     }
-    // };
+    const transformData = (data) => {
+        return getQualitiesListByIds(data).map((item) => ({
+            label: item.name,
+            value: item._id
+        }));
+    };
 
-    // //  у Василия реализовано иначе
-    // const getQualities = (array) => {
-    //     array = array.map((item) => item.value);
-    //     return Object.values(qualities).filter((qualitie) => {
-    //         return array.includes(qualitie._id);
-    //     });
-    // };
-
-    //  у Василия реализовано иначе
     useEffect(() => {
+        if (
+            !professionsLoading &&
+            !qualitiesLoading &&
+            currentUser & !userData
+        ) {
+            setUserData();
+        }
         setUserData({
             ...currentUser,
-            qualities: currentUser.qualities.map((q) => {
-                return getQuality(q);
-            })
+            qualities: transformData(currentUser.qualities)
         });
     }, []);
 
     useEffect(() => {
-        if (userData._id && qualities && professions) setIsUpdate(false);
+        if (userData && isUpdate) setIsUpdate(false);
     }, [userData]);
 
     const handleChange = (target) => {
@@ -106,7 +113,10 @@ const UserEditPage = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        await updateUserData(userData);
+        await updateUserData({
+            ...userData,
+            qualities: userData.qualities.map((q) => q.value)
+        });
         history.push(`/users/${userId}`);
     };
 
