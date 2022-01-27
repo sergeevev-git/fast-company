@@ -2,19 +2,22 @@ import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
 import CheckboxField from "../common/form/checkBoxField";
-import { useAuth } from "../../hooks/useAuth";
+
 import { useHistory } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthErrors, logIn } from "../../store/users";
 // import * as yup from "yup";
 
 const LoginForm = () => {
+    const dispatch = useDispatch();
     const [data, setData] = useState({
         email: "",
         password: "",
         stayOn: false
     });
     const [errors, setErrors] = useState({});
-    const [enterError, setEnterError] = useState(null);
-    const { signIn } = useAuth();
+    const loginError = useSelector(getAuthErrors());
+    // const [enterError, setEnterError] = useState(null);
     const history = useHistory();
 
     const handleChange = (target) => {
@@ -22,7 +25,7 @@ const LoginForm = () => {
             ...prevState,
             [target.name]: target.value
         }));
-        setEnterError(null);
+        // setEnterError(null);
     };
 
     // const validateScheme = yup.object().shape({
@@ -48,7 +51,7 @@ const LoginForm = () => {
             // isEmail: { message: "Email введен некорректно" }
         },
         password: {
-            isRequired: { message: "password обязателен для заполнения" }
+            isRequired: { message: "Password обязателен для заполнения" }
             // isCapitalSymbol: {
             //     message: "пароль должен содержать заглавные буквы"
             // },
@@ -80,20 +83,15 @@ const LoginForm = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        try {
-            await signIn(data);
-            history.push(
-                history.location.state
-                    ? history.location.state.from.pathname
-                    : "/"
-            );
-        } catch (error) {
-            setEnterError(error.message);
-        }
+
+        const redirect = history.location.state
+            ? history.location.state.from.pathname
+            : "/";
+        dispatch(logIn({ payload: data, redirect }));
     };
 
     return (
@@ -120,11 +118,12 @@ const LoginForm = () => {
             >
                 Оставаться в системе
             </CheckboxField>
-            {enterError && <p className="text-danger">{enterError}</p>}
+            {/* {enterError && <p className="text-danger">{enterError}</p>} */}
+            {loginError && <p className="text-danger">{loginError}</p>}
             <button
                 className="btn btn-primary w-100 mx-auto"
                 type="submit"
-                disabled={!isValid || enterError}
+                disabled={!isValid}
             >
                 Submit
             </button>

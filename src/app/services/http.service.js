@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import configFile from "../config/config.json";
-import { httpAuth } from "../hooks/useAuth";
+import authService from "./auth.service";
 import localStorageService from "./localStorage.service";
 
 //  создали экземпляр axios с определенным конфигом
@@ -22,10 +22,7 @@ http.interceptors.request.use(
             const expiresDate = localStorageService.getTokenExpiresDate();
             const refreshToken = localStorageService.getRefreshToken();
             if (refreshToken && expiresDate < Date.now()) {
-                const { data } = await httpAuth.post("token", {
-                    grant_type: "refresh_token",
-                    refresh_token: refreshToken
-                });
+                const data = await authService.refresh();
                 console.log(data);
                 localStorageService.setTokens({
                     refreshToken: data.refresh_token,

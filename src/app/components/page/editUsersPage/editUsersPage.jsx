@@ -1,21 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
 import { validator } from "../../../utils/validator";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
-import { useProfessions } from "../../../hooks/useProfession";
-import { useQualities } from "../../../hooks/useQualities";
-import { useAuth } from "../../../hooks/useAuth";
+import { useSelector, useDispatch } from "react-redux";
+import {
+    getQualities,
+    getQualitiesLoadingStatus
+} from "../../../store/qualities";
+import {
+    getProfessions,
+    getProfessionsLoadingStatus
+} from "../../../store/professions";
+import { getCurrentUserData, updateUser } from "../../../store/users";
 
 const UserEditPage = () => {
-    const { userId } = useParams();
-    const history = useHistory();
-    const { currentUser, updateUserData } = useAuth();
-    const { professions, isLoading: professionsLoading } = useProfessions();
-    const { qualities, isLoading: qualitiesLoading } = useQualities();
+    const dispatch = useDispatch();
+    const currentUser = useSelector(getCurrentUserData());
+    const professions = useSelector(getProfessions());
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
+
+    const qualities = useSelector(getQualities());
+    const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
+
     const [isUpdate, setIsUpdate] = useState(true);
     const [userData, setUserData] = useState();
     const [errors, setErrors] = useState({});
@@ -109,15 +118,20 @@ const UserEditPage = () => {
 
     const isValid = Object.keys(errors).length === 0;
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        await updateUserData({
-            ...userData,
-            qualities: userData.qualities.map((q) => q.value)
-        });
-        history.push(`/users/${userId}`);
+        // await updateUserData({
+        //     ...userData,
+        //     qualities: userData.qualities.map((q) => q.value)
+        // });
+        dispatch(
+            updateUser({
+                ...userData,
+                qualities: userData.qualities.map((q) => q.value)
+            })
+        );
     };
 
     return (

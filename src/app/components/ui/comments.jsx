@@ -1,21 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { orderBy } from "lodash";
-
+import { nanoid } from "nanoid";
 import CommentsList, { AddCommentForm } from "../common/comments";
-import { useComments } from "../../hooks/useComments";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    getComments,
+    getCommentsLoadingStatus,
+    loadCommentsList,
+    createComment,
+    removeComment
+} from "../../store/comments";
+import { useParams } from "react-router-dom";
+import { getCurrentUserId } from "../../store/users";
 
 const Comments = () => {
-    const { createComment, removeComment, comments } = useComments();
+    const currentUserId = useSelector(getCurrentUserId());
+    const { userId } = useParams();
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(loadCommentsList(userId));
+    }, [userId]);
+    const isLoading = useSelector(getCommentsLoadingStatus());
+    const comments = useSelector(getComments());
 
-    const addComment = (data) => {
-        createComment(data);
-        // api.comments
-        //     .add({ ...data, pageId: userId })
-        //     .then((data) => setcomments([...comments, data]));
+    const addComment = (comment) => {
+        comment = {
+            ...comment,
+            _id: nanoid(),
+            pageId: userId,
+            created_at: Date.now(),
+            userId: currentUserId
+        };
+        dispatch(createComment(comment));
     };
 
     const deleteComment = (commentId) => {
-        removeComment(commentId);
+        dispatch(removeComment(commentId));
     };
 
     const sortedComments = orderBy(comments, ["created_at"], ["desc"]);
@@ -43,10 +63,14 @@ const Comments = () => {
                     <div className="card-body ">
                         <h2>Comments</h2>
                         <hr />
-                        <CommentsList
-                            comments={sortedComments}
-                            deleteComment={deleteComment}
-                        />
+                        {!isLoading ? (
+                            <CommentsList
+                                comments={sortedComments}
+                                deleteComment={deleteComment}
+                            />
+                        ) : (
+                            "Loading..."
+                        )}
                     </div>
                 </div>
             )}

@@ -9,17 +9,23 @@ import _ from "lodash";
 import UserPage from "../userPage/userPage.jsx";
 import { useParams } from "react-router";
 import TextField from "../../common/form/textField";
-import { useUser } from "../../../hooks/useUsers";
-import { useProfessions } from "../../../hooks/useProfession";
-import { useAuth } from "../../../hooks/useAuth";
+
+import { useSelector } from "react-redux";
+import {
+    getProfessions,
+    getProfessionsLoadingStatus
+} from "../../../store/professions";
+import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
     const params = useParams();
     const { userId } = params;
-    const { users } = useUser();
+    const users = useSelector(getUsersList());
 
-    const { currentUser } = useAuth();
-    const { isLoading: professionsLoading, professions } = useProfessions();
+    const currentUserId = useSelector(getCurrentUserId());
+
+    const professions = useSelector(getProfessions());
+    const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedProf, setSelectedProf] = useState();
     const [searchQuery, setSearchQuery] = useState("");
@@ -85,7 +91,7 @@ const UsersListPage = () => {
                       (user) => user.profession.name === selectedProf.name
                   )
                 : data;
-            return filteredUsers.filter((user) => user._id !== currentUser._id);
+            return filteredUsers.filter((user) => user._id !== currentUserId);
         }
 
         const filteredUsers = filterUsers(users);

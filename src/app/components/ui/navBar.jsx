@@ -1,10 +1,11 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { getIsLoggedIn } from "../../store/users";
 import NavProfile from "./navProfile";
 
 const NavBar = () => {
-    const { currentUser } = useAuth();
+    const isLoggedIn = useSelector(getIsLoggedIn());
 
     return (
         <nav className="navbar bg-light mb-3">
@@ -13,7 +14,7 @@ const NavBar = () => {
                     <li className="nav-item m-3">
                         <Link to="/">Main page</Link>
                     </li>
-                    {currentUser && (
+                    {isLoggedIn && (
                         <li className="nav-item m-3">
                             <Link to="/users">Users</Link>
                         </li>
@@ -21,7 +22,7 @@ const NavBar = () => {
                     <li className="nav-item m-3"></li>
                 </ul>
                 <div className="d-flex">
-                    {currentUser ? (
+                    {isLoggedIn ? (
                         <NavProfile />
                     ) : (
                         <Link to="/login">Login</Link>

@@ -4,13 +4,12 @@ import QualitiesCard from "../../ui/qualitiesCard";
 import MeetingsCard from "../../ui/meetingsCard";
 import UserCard from "../../ui/userCard";
 import Comments from "../../ui/comments";
-import { useUser } from "../../../hooks/useUsers";
-import { CommentsProvider } from "../../../hooks/useComments";
+import { getUserById } from "../../../store/users";
+import { useSelector } from "react-redux";
 // import CommentsList from "../../ui/comments";
 
 const UserPage = ({ userId }) => {
-    const { getUserById } = useUser();
-    const user = getUserById(userId);
+    const user = useSelector(getUserById(userId));
 
     if (user) {
         return (
@@ -24,9 +23,7 @@ const UserPage = ({ userId }) => {
                         />
                     </div>
                     <div className="col md-8">
-                        <CommentsProvider>
-                            <Comments />
-                        </CommentsProvider>
+                        <Comments />
                     </div>
                 </div>
             </div>
