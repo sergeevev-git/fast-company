@@ -40,8 +40,10 @@ const {
     commentRemoved
 } = actions;
 
-const commentCreatedFailed = createAction("comments/commentCreatedFailed");
-const commentRemovedFailed = createAction("comments/commentRemovedFailed");
+const createCommentRequested = createAction("comments/createCommentRequested");
+const removeCommentRequested = createAction("comments/removeCommentRequested");
+const createCommentFailed = createAction("comments/createCommentFailed");
+const removeCommentFailed = createAction("comments/removeCommentFailed");
 
 export const loadCommentsList = (userId) => async (dispatch) => {
     dispatch(commentsRequested());
@@ -59,21 +61,24 @@ export const getCommentsLoadingStatus = () => (state) =>
     state.comments.isLoading;
 
 export const createComment = (payload) => async (dispatch) => {
+    dispatch(createCommentRequested());
     try {
         const { content } = await commentsService.createComment(payload);
         dispatch(commentCreated(content));
     } catch (error) {
-        dispatch(commentCreatedFailed(error.message));
+        dispatch(createCommentFailed(error.message));
     }
 };
 
 export const removeComment = (commentId) => async (dispatch) => {
+    dispatch(removeCommentRequested());
     try {
-        // const { content } = await commentsService.removeComment(commentId);
-        await commentsService.removeComment(commentId);
-        dispatch(commentRemoved(commentId));
+        const { content } = await commentsService.removeComment(commentId);
+        if (content === null) {
+            dispatch(commentRemoved(commentId));
+        }
     } catch (error) {
-        dispatch(commentRemovedFailed(error.message));
+        dispatch(removeCommentFailed(error.message));
     }
 };
 

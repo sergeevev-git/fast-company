@@ -9,7 +9,6 @@ import _ from "lodash";
 import UserPage from "../userPage/userPage.jsx";
 import { useParams } from "react-router";
 import TextField from "../../common/form/textField";
-
 import { useSelector } from "react-redux";
 import {
     getProfessions,
@@ -21,9 +20,7 @@ const UsersListPage = () => {
     const params = useParams();
     const { userId } = params;
     const users = useSelector(getUsersList());
-
     const currentUserId = useSelector(getCurrentUserId());
-
     const professions = useSelector(getProfessions());
     const professionsLoading = useSelector(getProfessionsLoadingStatus());
     const [currentPage, setCurrentPage] = useState(1);

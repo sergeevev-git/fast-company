@@ -40,17 +40,6 @@ const Comments = () => {
 
     const sortedComments = orderBy(comments, ["created_at"], ["desc"]);
 
-    // const addComment = (data) => {
-    //     api.comments.add(data).then((comment) => console.log(comment));
-    //     setIsUpdate(true);
-    // };
-
-    // const commentOwner = (userId) => {
-    //     const owner = users.find((user) => user._id === userId);
-    //     console.log(owner);
-    //     return owner ? owner.name : "";
-    // };
-
     return (
         <>
             <div className="card mb-2">

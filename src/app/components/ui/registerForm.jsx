@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
 import { validator } from "../../utils/validator";
-
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckboxField from "../common/form/checkBoxField";
-
 import { getQualities } from "../../store/qualities";
 import { getProfessions } from "../../store/professions";
-
 import { useSelector, useDispatch } from "react-redux";
-
 import { signUp } from "../../store/users";
 
 const Registerform = () => {

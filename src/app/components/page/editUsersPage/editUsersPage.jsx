@@ -52,13 +52,6 @@ const UserEditPage = () => {
         return qualitiesArray;
     }
 
-    // const getQualitiesListByIds = (array) => {
-    //         array = array.map((item) => item.value);
-    //         return Object.values(qualities).filter((qualitie) => {
-    //             return array.includes(qualitie._id);
-    //         });
-    //     };
-
     const transformData = (data) => {
         return getQualitiesListByIds(data).map((item) => ({
             label: item.name,
@@ -122,10 +115,6 @@ const UserEditPage = () => {
         e.preventDefault();
         const isValid = validate();
         if (!isValid) return;
-        // await updateUserData({
-        //     ...userData,
-        //     qualities: userData.qualities.map((q) => q.value)
-        // });
         dispatch(
             updateUser({
                 ...userData,
