@@ -1,0 +1,4 @@
+{
+    "apiEndPoint": "http://localhost:5055/api/",
+    "isFireBase": false
+}
